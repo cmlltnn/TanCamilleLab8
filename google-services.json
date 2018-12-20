@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "639696846005",
+    "firebase_url": "https://tancamillelab8.firebaseio.com",
+    "project_id": "tancamillelab8",
+    "storage_bucket": "tancamillelab8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639696846005:android:30866f8f178282a0",
+        "android_client_info": {
+          "package_name": "com.tan.camille"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639696846005-n3c9a9lj6utc607u945a3rjra15f5skh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tan.camille",
+            "certificate_hash": "a09ccfc7bef64f79da77a8af57f77f25ac306d8d"
+          }
+        },
+        {
+          "client_id": "639696846005-pvcbjo7jit1oa6ppvcsdsb3ic863piac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqD3sBnvSgeS9XNSr_AbsG6Xt31eLq3lI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639696846005-pvcbjo7jit1oa6ppvcsdsb3ic863piac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
