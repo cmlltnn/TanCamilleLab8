@@ -1,56 +1,95 @@
 package com.tan.camille;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etFname;
-    EditText etAge;
-    EditText etGender;
-    Button btSave;
-    Button btSearch;
-    TextView tvDisplay;
+    DatabaseReference db;
+
+    EditText eName, eAge, eGender;
+    TextView tName, tAge, tGender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvDisplay = findViewById(R.id.display);
-        etFname = findViewById(R.id.fname);
-        etAge = findViewById(R.id.age);
-        etGender = findViewById(R.id.gender);
-        btSave = findViewById(R.id.save);
-        btSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertRecord();
-            }
-        });
-        btSearch = findViewById(R.id.search);
+        db = FirebaseDatabase.getInstance().getReference("student");
 
+        eName = findViewById(R.id.etName);
+        eAge = findViewById(R.id.etAge);
+        eGender = findViewById(R.id.etGender);
+
+        tName = findViewById(R.id.rName);
+        tAge = findViewById(R.id.rAge);
+        tGender = findViewById(R.id.rGender);
 
     }
 
-    public void insertRecord(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference root =  database.getReference("Record");
-        String fname = etFname.getText().toString().trim();
-        String gender = etGender.getText().toString().trim();
-        int age = Integer.parseInt(etAge.getText().toString().trim());
+    public void search(View v) {
+        final String name = beautifyTextField(eName).toLowerCase();
 
-        Record srecord = new Record(fname,gender,age);
-        String key = root.push().getKey();
-        root.child(key).setValue(srecord);
-        Toast.makeText(this,"record added to db",Toast.LENGTH_LONG).show();
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ss : dataSnapshot.getChildren()) {
+                    Person p = ss.getValue(Person.class);
+                    String person_name = p.getName().toLowerCase();
+
+                    if(!person_name.equals(name))
+                        continue;
+
+                    else {
+                        tName.setText(p.getName());
+                        tAge.setText(p.getAge());
+                        tGender.setText(p.getGender());
+                        Toast("Record found...");
+                        return;
+                    }
+                }
+
+                tName.setText("");
+                tAge.setText("");
+                tGender.setText("");
+                Toast("Record not found...");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        };
+
+        db.addValueEventListener(listener);
+    }
+
+    public void save(View v) {
+        String name, age, gender, key;
+
+        name = beautifyTextField(eName);
+        age = beautifyTextField(eAge);
+        gender = beautifyTextField(eGender);
+
+        key = db.push().getKey();
+
+        db.child(key).setValue(new Person(name, age, gender));
+
+        Toast("Record added.....");
+    }
+
+    protected String beautifyTextField(EditText et) {
+        return et.getText().toString().trim();
+    }
+    protected void Toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
